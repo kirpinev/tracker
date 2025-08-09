@@ -22,7 +22,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 	values := strings.Split(data, ",")
 
 	if len(values) != 2 {
-		return 0, 0, errors.New("длина меньше двух")
+		return 0, 0, errors.New("length is less than two")
 	}
 
 	steps, err := strconv.Atoi(values[0])
@@ -32,7 +32,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 	}
 
 	if steps <= 0 {
-		return 0, 0, errors.New("количество шагов меньше или равно 0")
+		return 0, 0, errors.New("number of steps is less than or equal to 0")
 	}
 
 	duration, err := time.ParseDuration(strings.TrimSpace(values[1]))
@@ -42,7 +42,7 @@ func parsePackage(data string) (int, time.Duration, error) {
 	}
 
 	if duration <= 0 {
-		return 0, 0, errors.New("продолжительность должна быть больше нуля")
+		return 0, 0, errors.New("duration must be greater than zero")
 	}
 
 	return steps, duration, nil

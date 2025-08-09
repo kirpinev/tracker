@@ -19,19 +19,19 @@ const (
 
 func validateInputs(steps int, weight, height float64, duration time.Duration) error {
 	if steps <= 0 {
-		return errors.New("количество шагов меньше или равно 0")
+		return errors.New("number of steps is less than or equal to 0")
 	}
 
 	if weight <= 0 {
-		return errors.New("вес должен быть больше нуля")
+		return errors.New("weight must be greater than zero")
 	}
 
 	if height <= 0 {
-		return errors.New("рост должен быть больше нуля")
+		return errors.New("height must be greater than zero")
 	}
 
 	if duration <= 0 {
-		return errors.New("продолжительность должна быть больше нуля")
+		return errors.New("duration must be greater than zero")
 	}
 
 	return nil
@@ -48,8 +48,8 @@ func formatTrainingInfo(activity string, steps int, height float64, duration tim
 func parseTraining(data string) (int, string, time.Duration, error) {
 	values := strings.Split(data, ",")
 
-	if len(values) < 3 || len(values) >= 4 {
-		return 0, "", 0, errors.New("длина меньше трех")
+	if len(values) != 3 {
+		return 0, "", 0, errors.New("length is less than three")
 	}
 
 	steps, err := strconv.Atoi(strings.TrimSpace(values[0]))
@@ -98,19 +98,18 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	}
 
 	var calories float64
-	var errCalories error
 
 	switch activity {
 	case "Ходьба":
-		calories, errCalories = WalkingSpentCalories(steps, weight, height, duration)
+		calories, err = WalkingSpentCalories(steps, weight, height, duration)
 	case "Бег":
-		calories, errCalories = RunningSpentCalories(steps, weight, height, duration)
+		calories, err = RunningSpentCalories(steps, weight, height, duration)
 	default:
 		return "", errors.New("неизвестный тип тренировки")
 	}
 
-	if errCalories != nil {
-		return "", errCalories
+	if err != nil {
+		return "", err
 	}
 
 	return formatTrainingInfo(activity, steps, height, duration, calories), nil
